@@ -24,7 +24,7 @@ CRC16-CCITT 参数：poly=0x1021，init=0xFFFF。
 ---
 ## 任务A（工程题）：实现 rmproto 库
 你需要完成 `include/rmproto/frame.hpp` 中的接口实现（已经在 `src/frame.cpp` 给了参考实现；你可以删掉并自己实现，或基于它改进，但最终以测试通过为准）。
-
+- 请勿修改其他目录下的任何文件，否则可能导致自动化测试失败。
 ### 必须实现
 - `rmproto::Encode(const Frame&)`：把结构体编码成字节数组
 - `rmproto::TryDecode(std::vector<uint8_t>& buffer, Frame& out)`：从**可变缓冲区**中尝试解析一帧
@@ -40,25 +40,24 @@ CRC16-CCITT 参数：poly=0x1021，init=0xFFFF。
 ## 任务B（算法题，可用 Python 对照）：CRC16
 实现/理解 CRC16-CCITT。
 - C++：在 `Crc16Ccitt` 中实现
-- Python：可用 `tools/ref.py` 做对照验证（不是必须提交）
 
 ---
 ## 如何构建与运行
-在仓库根目录：
+在 *仓库根目录*：
 
-```powershell
-cmake -S assignment_1 -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-ctest --test-dir build -C Release --output-on-failure
+```bash
+cmake -S assignment_1 -B build/assignment_1 -DCMAKE_BUILD_TYPE=Release
+cmake --build build/assignment_1 --config Release
+ctest --test-dir build/assignment_1 -C Release --output-on-failure
 ```
 
 ### CLI 试玩
-```powershell
+```bash
 # 编码：seq=42 type=7 payload=01 02 A0 FF
-.\build\Release\rmproto_cli.exe encode 42 7 "01 02 A0 FF"
+./build/assignment_1/rmproto_cli encode 42 7 "01 02 A0 FF"
 
 # 解码：把上一步输出粘贴进来
-.\build\Release\rmproto_cli.exe decode "A5 5A ..."
+./build/assignment_1/rmproto_cli decode "A5 5A ..."
 ```
 
 ---

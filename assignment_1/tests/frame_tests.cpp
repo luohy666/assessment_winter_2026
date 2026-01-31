@@ -21,7 +21,7 @@ TEST(RmProto, EncodeDecodeRoundTrip) {
   EXPECT_EQ(out.type, in.type);
   EXPECT_EQ(out.payload, in.payload);
 }
-
+// 正常帧的编码与解码测试。
 TEST(RmProto, ResyncOnGarbage) {
   rmproto::Frame in;
   in.seq = 1;
@@ -39,7 +39,7 @@ TEST(RmProto, ResyncOnGarbage) {
   EXPECT_EQ(out.type, in.type);
   EXPECT_EQ(out.payload, in.payload);
 }
-
+// 帧前有垃圾数据，测试重新同步能力。
 TEST(RmProto, RejectBadCrc) {
   rmproto::Frame in;
   in.seq = 9;

@@ -1,14 +1,20 @@
 name: ci
 
 on:
-  push:
-  pull_request:
+  # push:
+  # pull_request:
+  workflow_dispatch:
+    inputs:
+      a0_optional:
+        description: 'Build optional A0-09~11 and run assignment_0 tests'
+        type: boolean
+        default: false
 
 jobs:
   build-test:
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -22,3 +28,17 @@ jobs:
 
       - name: Test
         run: ctest --test-dir build -C Release --output-on-failure
+
+      - name: Configure (assignment_0)
+        run: >-
+          cmake -S assignment_0 -B build/a0 -DCMAKE_BUILD_TYPE=Release
+          -DA0_REFERENCE=OFF
+          -DA0_BUILD_OPTIONAL_09_11=${{ (github.event.inputs.a0_optional == 'true') && 'ON' || 'OFF' }}
+          -DBUILD_TESTING=${{ (github.event.inputs.a0_optional == 'true') && 'ON' || 'OFF' }}
+
+      - name: Build (assignment_0)
+        run: cmake --build build/a0 --config Release
+
+      - name: Test (assignment_0)
+        if: ${{ github.event.inputs.a0_optional == 'true' }}
+        run: ctest --test-dir build/a0 -C Release --output-on-failure

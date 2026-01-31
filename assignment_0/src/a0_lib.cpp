@@ -1,0 +1,336 @@
+#include "rm_a0/a0_lib.hpp"
+
+#include "rm_a0/a0_01_temperature.hpp"
+#include "rm_a0/a0_02_leap_year.hpp"
+#include "rm_a0/a0_03_range_sum.hpp"
+#include "rm_a0/a0_04_vowel_count.hpp"
+#include "rm_a0/a0_05_score_stats.hpp"
+#include "rm_a0/a0_06_bigint.hpp"
+#include "rm_a0/a0_07_log_analyzer.hpp"
+#include "rm_a0/a0_08_raii_handle.hpp"
+
+#include <cctype>
+#include <cstdio>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <vector>
+
+namespace rm_a0 {
+
+// ==================== A0-01 Temperature ====================
+// TODO: 完成下面函数的实现
+double CelsiusToFahrenheit(double celsius) {
+    (void)celsius;
+    return 0.0;
+}
+// 这里是格式化输出的函数
+std::string FormatFahrenheit(double fahrenheit) {
+    (void)fahrenheit;
+    return {};
+}
+
+std::string SolveTemperature(const std::string& input, bool& ok) {
+    std::istringstream in(input);
+    double celsius = 0.0;
+    if (!(in >> celsius)) {
+        ok = false;
+        return {};
+    }
+
+    ok = true;
+    return FormatFahrenheit(CelsiusToFahrenheit(celsius));
+}
+
+// ==================== A0-02 Leap Year ====================
+// TODO: 完成下面函数的实现
+bool IsLeapYear(int year) {
+    return false;
+}
+// TODO: 完成下面函数的实现,不要新增行数，只修改返回值
+std::string FormatLeapYearAnswer(bool is_leap_year) {
+    (void)is_leap_year;
+    return {};
+}
+
+std::string SolveLeapYear(const std::string& input, bool& ok) {
+    std::istringstream in(input);
+    int year = 0;
+    if (!(in >> year)) {
+        ok = false;
+        return {};
+    }
+
+    ok = true;
+    return FormatLeapYearAnswer(IsLeapYear(year));
+}
+
+// ==================== A0-03 Range Sum ====================
+// TODO: 完成下面函数的实现
+long long RangeSum(long long l, long long r) {
+    (void)l;
+    (void)r;
+    return 0;
+}
+
+std::string SolveRangeSum(const std::string& input, bool& ok) {
+    std::istringstream in(input);
+    long long l = 0;
+    long long r = 0;
+    if (!(in >> l >> r)) {
+        ok = false;
+        return {};
+    }
+    ok = true;
+    std::ostringstream out;
+    out << RangeSum(l, r) << "\n";
+    return out.str();
+}
+
+// ==================== A0-04 Vowel Count ====================
+
+namespace {
+    namespace a0_04_detail {
+
+        bool IsVowelChar(unsigned char c) {
+            // TODO: 完成下面函数的实现
+            (void)c;
+            return false;
+        }
+
+    } // namespace a0_04_detail
+} // namespace
+
+std::size_t CountVowels(const std::string& line) {
+    std::size_t count = 0;
+    // TODO: 完成下面函数的实现
+        
+    return count;
+}
+
+std::string SolveVowelCount(const std::string& input, bool& ok) {
+    std::istringstream in(input);
+    std::string line;
+    if (!std::getline(in, line)) {
+        ok = false;
+        return {};
+    }
+    ok = true;
+    std::ostringstream out;
+    out << CountVowels(line) << "\n";
+    return out.str();
+}
+
+// ==================== A0-05 Score Stats ====================
+
+ScoreStatsResult ComputeScoreStats(const std::string& input, bool& ok) {
+    ok = false;
+    std::istringstream in(input);
+    // TODO: 完成下面函数的实现
+
+    return res;
+}
+
+std::string SolveScoreStats(const std::string& input, bool& ok) {
+    auto res = ComputeScoreStats(input, ok);
+    if (!ok) {
+        return {};
+    }
+
+    std::ostringstream out;
+    out << "top=" << res.top_name << " " << res.top_score << "\n";
+    out << "avg=" << std::fixed << std::setprecision(2) << res.avg << "\n";
+    return out.str();
+}
+
+// ==================== A0-06 BigInt ====================
+
+// TODO: 参考hpp完成类实现
+/*
+at a0_06_bigint.hpp:
+class BigInt {
+public:
+  BigInt();
+
+  // Constructs from a non-negative decimal string.
+  explicit BigInt(const std::string &s);
+
+  friend BigInt operator+(const BigInt &a, const BigInt &b);
+  friend std::ostream &operator<<(std::ostream &os, const BigInt &x);
+
+private:
+  // Little-endian digits, each 0..9.
+  std::vector<int> digits_;
+};
+*/
+
+std::string SolveBigIntAdd(const std::string& input, bool& ok) {
+    std::istringstream in(input);
+    std::string a;
+    std::string b;
+    if (!std::getline(in, a)) {
+        ok = false;
+        return {};
+    }
+    if (!std::getline(in, b)) {
+        ok = false;
+        return {};
+    }
+
+    ok = true;
+    std::ostringstream out;
+    out << (BigInt(a) + BigInt(b)) << "\n";
+    return out.str();
+}
+
+// ==================== A0-07 Log Analyzer ====================
+/*
+at a0_07_log_analyzer.hpp:
+struct LogStats {
+  long long info = 0;
+  long long warn = 0;
+  long long error = 0;
+  double avg_ms = 0.0;
+  std::string max_level;
+  long long max_ms = 0;
+};
+*/
+LogStats AnalyzeLogFile(const std::string& path, bool& ok) {
+    return {};
+}
+
+std::string SolveLogAnalyzer(const std::string& input, bool& ok) {
+    std::istringstream in(input);
+    std::string path;
+    if (!std::getline(in, path)) {
+        ok = false;
+        return {};
+    }
+    if (path.empty()) {
+        ok = false;
+        return "FAIL\n";
+    }
+
+    bool file_ok = false;
+    LogStats s   = AnalyzeLogFile(path, file_ok);
+    if (!file_ok) {
+        ok = false;
+        return "FAIL\n";
+    }
+
+    ok = true;
+    std::ostringstream out;
+    out << "INFO=" << s.info << "\n";
+    out << "WARN=" << s.warn << "\n";
+    out << "ERROR=" << s.error << "\n";
+    out << "avg=" << std::fixed << std::setprecision(2) << s.avg_ms << "\n";
+    out << "max=" << s.max_level << " " << s.max_ms << "\n";
+    return out.str();
+}
+
+// ==================== A0-08 RAII Handle ====================
+
+// TODO: 参考hpp完成类实现
+/*
+at a0_08_raii_handle.hpp:
+class FileHandle {
+public:
+  FileHandle() = default;
+  FileHandle(const char *path, const char *mode);
+  ~FileHandle();
+
+  FileHandle(const FileHandle &) = delete;
+  FileHandle &operator=(const FileHandle &) = delete;
+
+  FileHandle(FileHandle &&other) noexcept;
+  FileHandle &operator=(FileHandle &&other) noexcept;
+
+  bool valid() const;
+  FILE *get() const;
+
+private:
+  FILE *fp_ = nullptr;
+};
+*/
+
+bool CopyFile(const std::string& in_path, const std::string& out_path) {
+    FileHandle in(in_path.c_str(), "rb");
+    if (!in.valid()) {
+        return false;
+    }
+    FileHandle out(out_path.c_str(), "wb");
+    if (!out.valid()) {
+        return false;
+    }
+
+    char buf[4096];
+    while (true) {
+        std::size_t n = std::fread(buf, 1, sizeof(buf), in.get());
+        if (n > 0) {
+            if (std::fwrite(buf, 1, n, out.get()) != n) {
+                return false;
+            }
+        }
+        if (n < sizeof(buf)) {
+            if (std::ferror(in.get()) != 0) {
+                return false;
+            }
+            break;
+        }
+    }
+
+    return true;
+}
+
+std::string SolveRaiiCopy(const std::string& input, bool& ok) {
+    std::istringstream in(input);
+    std::string in_path;
+    std::string out_path;
+    if (!(in >> in_path >> out_path)) {
+        ok = false;
+        return {};
+    }
+
+    if (CopyFile(in_path, out_path)) {
+        ok = true;
+        return "OK\n";
+    }
+
+    ok = false;
+    return "FAIL\n";
+}
+
+// ==================== A0-09 Text Pipeline====================
+
+std::vector<std::string> RunTextPipeline(const std::string& pipeline, const std::vector<std::string>& lines, bool& ok) {
+    (void)pipeline;
+    (void)lines;
+    ok = false;
+    return {};
+}
+
+// ==================== A0-10 Rule Engine ====================
+
+std::vector<long long> RunRuleEngine(
+    const std::vector<std::string>& rule_specs,
+    const std::vector<Event>& events,
+    long long& total_any,
+    bool& ok
+) {
+    (void)rule_specs;
+    (void)events;
+    total_any = 0;
+    ok        = false;
+    return {};
+}
+
+// ==================== A0-11 Command Dispatcher====================
+
+std::string RunCommandDispatcher(const std::string& full_stdin, bool& ok) {
+    (void)full_stdin;
+    ok = false;
+    return "FAIL\n";
+}
+
+} // namespace rm_a0
