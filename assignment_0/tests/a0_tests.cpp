@@ -69,7 +69,7 @@ TEST(A003RangeSum, ComputesArithmeticSum) {
     EXPECT_TRUE(ok);
 
     ok = true;
-    EXPECT_EQ(rm_a0::SolveRangeSum("-2 2\n", ok), "0\n");
+    EXPECT_EQ(rm_a0::SolveRangeSum("-2 1145141919810\n", ok), "3936897706503538848\n");
     EXPECT_TRUE(ok);
 }
 
@@ -119,6 +119,10 @@ TEST(A005ScoreStats, InvalidInput) {
 TEST(A006BigInt, AddsLargeNumbers) {
     bool ok = true;
     EXPECT_EQ(rm_a0::SolveBigIntAdd("999\n1\n", ok), "1000\n");
+    EXPECT_TRUE(ok);
+
+    ok = true;
+    EXPECT_EQ(rm_a0::SolveBigIntAdd("123456789012345678901234567890\n987654321098765432109876543210\n", ok), "1111111110111111111011111111100\n");
     EXPECT_TRUE(ok);
 }
 

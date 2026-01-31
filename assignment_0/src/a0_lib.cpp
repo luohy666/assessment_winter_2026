@@ -129,7 +129,7 @@ ScoreStatsResult ComputeScoreStats(const std::string& input, bool& ok) {
     std::istringstream in(input);
     // TODO: 完成下面函数的实现
 
-    return res;
+    return ScoreStatsResult{};
 }
 
 std::string SolveScoreStats(const std::string& input, bool& ok) {
@@ -169,6 +169,7 @@ std::string SolveBigIntAdd(const std::string& input, bool& ok) {
     std::istringstream in(input);
     std::string a;
     std::string b;
+    std::ostringstream out;
     if (!std::getline(in, a)) {
         ok = false;
         return {};
@@ -179,8 +180,6 @@ std::string SolveBigIntAdd(const std::string& input, bool& ok) {
     }
 
     ok = true;
-    std::ostringstream out;
-    out << (BigInt(a) + BigInt(b)) << "\n";
     return out.str();
 }
 
@@ -255,30 +254,6 @@ private:
 */
 
 bool CopyFile(const std::string& in_path, const std::string& out_path) {
-    FileHandle in(in_path.c_str(), "rb");
-    if (!in.valid()) {
-        return false;
-    }
-    FileHandle out(out_path.c_str(), "wb");
-    if (!out.valid()) {
-        return false;
-    }
-
-    char buf[4096];
-    while (true) {
-        std::size_t n = std::fread(buf, 1, sizeof(buf), in.get());
-        if (n > 0) {
-            if (std::fwrite(buf, 1, n, out.get()) != n) {
-                return false;
-            }
-        }
-        if (n < sizeof(buf)) {
-            if (std::ferror(in.get()) != 0) {
-                return false;
-            }
-            break;
-        }
-    }
 
     return true;
 }
