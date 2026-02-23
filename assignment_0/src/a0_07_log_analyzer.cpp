@@ -1,18 +1,54 @@
 #include <iostream>
-#include <sstream>
+#include <fstream>
 #include <string>
-
-#include "rm_a0/a0_07_log_analyzer.hpp"
+#include <iomanip>
+#include <vector>
 
 int main() {
-  std::string path;
-  if (!std::getline(std::cin, path)) {
+    std::string path;
+    std::getline(std::cin, path);  // 读文件路径（一行）
+
+    std::ifstream file(path);
+  
+    int info_cnt = 0, warn_cnt = 0, error_cnt = 0;
+    long long total_ms = 0;
+    int max_ms = -1;
+    std::string max_line;
+
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
+        std::istringstream iss(line);
+        std::string level;
+        int ms;
+        if (!(iss >> level >> ms)) continue;  // 解析失败跳过
+
+        if (level == "INFO") ++info_cnt;
+        else if (level == "WARN") ++warn_cnt;
+        else if (level == "ERROR") ++error_cnt;
+        else continue;  // 无效 level 跳过
+
+        total_ms += ms;
+
+        // 更新最大耗时（并列取最先的）
+        if (ms > max_ms) {
+            max_ms = ms;
+            max_line = level + " " + std::to_string(ms);
+        }
+        // 注意：如果 ms == max_ms，不更新（保持最早的）
+    }
+
+    file.close();
+
+    int total_lines = info_cnt + warn_cnt + error_cnt;
+    double avg = total_lines > 0 ? static_cast<double>(total_ms) / total_lines : 0.0;
+
+    std::cout << "INFO=" << info_cnt << "\n";
+    std::cout << "WARN=" << warn_cnt << "\n";
+    std::cout << "ERROR=" << error_cnt << "\n";
+    std::cout << std::fixed << std::setprecision(2) << "avg=" << avg << "\n";
+    std::cout << "max=" << max_line << "\n";
+
     return 0;
-  }
-
-  bool ok = false;
-  std::string out = rm_a0::SolveLogAnalyzer(path + "\n", ok);
-  std::cout << out;
-
-  return 0;
 }
