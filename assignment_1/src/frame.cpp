@@ -57,7 +57,6 @@ std::vector<uint8_t> Encode(const Frame& f) {
   // 这个占位实现会故意生成不正确的帧，从而让单元测试失败；
   // 但仍保证工程（以及 CLI）可以正常编译。
   std::vector<uint8_t> out;
-  out.reserve(2 + 1 + 2 + 2 + 1 + f.payload.size() + 2);
 
   out.push_back(kSof0);
   out.push_back(kSof1);
@@ -68,7 +67,10 @@ std::vector<uint8_t> Encode(const Frame& f) {
   out.insert(out.end(), f.payload.begin(), f.payload.end());
 
   // TODO: 替换为真实的 CRC。
-  AppendLe16(out, 0);
+  uint16_t crc = Crc16Ccitt(&out[2],out.size()-2);
+  out.push_back(crc & 0xFF);
+  out.push_back((crc >> 8) & 0xFF);
+  
   return out;
 }
 
