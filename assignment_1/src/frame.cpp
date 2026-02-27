@@ -95,9 +95,52 @@ bool TryDecode(std::vector<uint8_t>& buffer, Frame& out) {
   // - 若不足以组成完整帧：返回 false，并保持 buffer 不变。
   // - 若候选帧 CRC 错误 / 长度非法：丢弃部分字节并继续搜索（必须避免死循环）。
   // - 成功时：填充 out，从 buffer 中擦除已消费的字节，并返回 true。
-  (void)buffer;
-  (void)out;
+  size_t pos = 0;
+
+  while(pos + 10 <= buffer.size()){
+    if(buffer[pos] != 0xA5 || buffer[pos + 1] != 0x5A){
+      ++pos;
+      continue;
+    }
+
+    if(buffer[pos+2] != 1){
+      ++pos;
+      continue;
+    }
+
+    uint16_t payload_len = buffer[3 + pos]|(buffer[pos + 4]<<8);
+
+    size_t frame_len = 10 + payload_len;
+
+    if(pos+frame_len > buffer.size()){
+      return false;
+    }
+
+    uint16_t seq = buffer[pos+5]|(buffer[pos+6]<<8);
+    uint8_t type = buffer[pos+7];
+    std::vector<uint8_t>payload(buffer.begin()+pos+8,buffer.begin()+pos+8+payload_len);
+
+    uint16_t calc_crc = Crc16Ccitt(&buffer[pos+2],6+payload_len);
+    
+    uint16_t recv_crc = buffer[pos + 8 + payload_len] |(buffer[pos + 9 + payload_len] << 8);
+
+    if (calc_crc != recv_crc){
+      ++pos;
+      continue;
+    }
+
+    out.version = 1;
+    out.seq = seq;
+    out.type = type;
+    out.payload = std::move(payload);
+
+    buffer.erase(buffer.begin(),buffer.begin()+pos+frame_len);
+    
+    return true;
+  }
+
   return false;
+
 }
 
 bool ParseHexBytes(const std::string& text, std::vector<uint8_t>& out) {
@@ -154,4 +197,4 @@ std::string ToHex(const std::vector<uint8_t>& bytes) {
   return oss.str();
 }
 
-}  // namespace rmproto
+}  // namespace rmproto 
