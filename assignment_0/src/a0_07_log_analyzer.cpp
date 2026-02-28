@@ -6,8 +6,7 @@
 
 int main() {
     std::string path;
-    std::getline(std::cin, path);  // 读文件路径（一行）
-
+    std::getline(std::cin, path);
     std::ifstream file(path);
   
     int info_cnt = 0, warn_cnt = 0, error_cnt = 0;
@@ -22,22 +21,21 @@ int main() {
         std::istringstream iss(line);
         std::string level;
         int ms;
-        if (!(iss >> level >> ms)) continue;  // 解析失败跳过
+        if (!(iss >> level >> ms)) continue;
 
         if (level == "INFO") ++info_cnt;
         else if (level == "WARN") ++warn_cnt;
         else if (level == "ERROR") ++error_cnt;
-        else continue;  // 无效 level 跳过
+        else continue;
 
         total_ms += ms;
 
-        // 更新最大耗时（并列取最先的）
         if (ms > max_ms) {
             max_ms = ms;
             max_line = level + " " + std::to_string(ms);
         }
-        // 注意：如果 ms == max_ms，不更新（保持最早的）
-    }
+      }
+      
 
     file.close();
 
