@@ -53,7 +53,44 @@ int main(){
             circle(result,center,(int)radius,Scalar(0,255,0),2);
             circle(result,center,4,Scalar(0,0,255),-1);
 
+            string text = "r="+to_string((int)radius);
+            putText(result,text,Point(center.x+10,center.y-10),FONT_HERSHEY_SIMPLEX,0.7,Scalar(0,255,255),2);
+        
+            double r = REAL_DIAMETER_MM / 2.0;
+
+            vector<Point3f> object_points = {
+                Point3f(0, 0, 0),
+                Point3f(r, 0, 0),
+                Point3f(0, r, 0),
+                Point3f(0, 0, r)
+            };
+
+            vector<Point2f> image_points = {
+                center,
+                Point2f(center.x + radius,center.y),
+                Point2f(center.x,center.y-radius),
+                Point2f(center.x - radius,center.y)
+            };
+
+            Mat rvec,tvec;
+            bool pnp_success = solvePnP(object_points, image_points,cameramatrix,distcoeffs,rvec,tvec);
+
+            if(pnp_success){
+                double distance_mm = tvec.at<double>(2,0);
+
+                string dist_text = "dist(PnP)= " + to_string((int)distance_mm) + "mm";putText(result, dist_text,Point(center.x + 10, center.y + 30),FONT_HERSHEY_SIMPLEX,0.7,Scalar(0,255,255),2);
+
+                cout << img_path << distance_mm << "mm" << endl;
+            }
+            else{
+                cout << img_path << "faild" << endl;
+            }
     }
+    
+    string output_path = "imgs/result_" + img_path.substr(img_path.find_last_of('/')+1);
+        imwrite(output_path, result);
+        cout << "Finished" << output_path << endl;
+
 }
 return 0;
 
