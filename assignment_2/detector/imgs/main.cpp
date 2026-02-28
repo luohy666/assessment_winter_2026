@@ -36,9 +36,25 @@ int main(){
         Mat kernel = getStructuringElement(MORPH_ELLIPSE,Size(5,5));
         morphologyEx(mask,mask,MORPH_OPEN,kernel);
 
-        
-    }
+         vector<vector<Point>>contours;
+        findContours(mask,contours,RETR_EXTERNAL,CHAIN_APPROX_SIMPLE);
 
+        Mat result = img.clone();
+        for(size_t i = 0; i < contours.size(); ++i){
+            double area = contourArea(contours[i]);
+            if(area < 200) continue;
+
+            Point2f center;
+            float radius;
+            minEnclosingCircle(contours[i],center,radius);
+
+            if(radius < 15) continue;
+
+            circle(result,center,(int)radius,Scalar(0,255,0),2);
+            circle(result,center,4,Scalar(0,0,255),-1);
+
+    }
+}
 return 0;
 
 }
