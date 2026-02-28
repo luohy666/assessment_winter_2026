@@ -3,5 +3,7 @@ project(detector)
 
 find_package(OpenCV REQUIRED)
 
+include_directories(/usr/include/opencv4)
+
 add_executable(main main.cpp)
-target_link_libraries(main &{OpenCV_LIBS})
+target_link_libraries(main ${OpenCV_LIBS})
